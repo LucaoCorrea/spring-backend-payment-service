@@ -1,0 +1,33 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: payments-mysql-prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${HOST_MYSQL_PORT}:${MYSQL_PORT}"
+    command: --port=${MYSQL_PORT}
+    volumes:
+      - mysql_data_prod:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: payments-app-prod
+    depends_on:
+      - mysql
+    ports:
+      - "${HOST_APP_PORT}:${SERVER_PORT}"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SERVER_PORT: ${SERVER_PORT}
+    restart: always
+
+volumes:
+  mysql_data_prod:
