@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   mysql:
     image: mysql:8.0
@@ -9,8 +11,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "${HOST_MYSQL_PORT}:${MYSQL_PORT}"
-    command: --port=${MYSQL_PORT}
+      - "${HOST_MYSQL_PORT}:3306"
     volumes:
       - mysql_data_dev:/var/lib/mysql
 
